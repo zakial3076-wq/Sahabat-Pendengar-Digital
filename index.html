@@ -1,1 +1,336 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kotak Curhat & Sahabat Pendengar</title>
+    <!-- Tailwind CSS untuk Desain yang Cantik & Responsif -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        sage: {
+                            50: '#f4f7f4',
+                            100: '#e5ece5',
+                            500: '#7c9a7c',
+                            600: '#627d62',
+                            700: '#4e634e',
+                        },
+                        cream: {
+                            50: '#fcfbfa',
+                            100: '#f7f4f0',
+                            200: '#eee7de',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        /* Animasi Kartu 3D */
+        .perspective-1000 { perspective: 1000px; }
+        .transform-style-3d { transform-style: preserve-3d; }
+        .backface-hidden { backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
+    </style>
+</head>
+<body class="bg-cream-50 text-gray-700 font-sans min-h-screen flex flex-col">
 
+    <!-- Header & Navigasi -->
+    <header class="bg-white border-b border-sage-100 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-4xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-3">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-sage-500 rounded-full flex items-center justify-center text-white font-bold text-xl shadow-md">
+                    🌿
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-gray-800">Ruang Aman Kita</h1>
+                    <p class="text-xs text-sage-600 font-medium">Kotak Curhat & Sahabat Pendengar</p>
+                </div>
+            </div>
+            <!-- Menu Navigasi Tab -->
+            <nav class="flex bg-sage-50 p-1 rounded-xl text-sm font-medium">
+                <button onclick="switchTab('form')" id="btn-form" class="px-4 py-2 rounded-lg transition-all text-sage-700 bg-white shadow-xs">📝 Tulis Curhat</button>
+                <button onclick="switchTab('board')" id="btn-board" class="px-4 py-2 rounded-lg transition-all text-gray-600 hover:text-sage-700">💬 Papan Cerita</button>
+                <button onclick="switchTab('guide')" id="btn-guide" class="px-4 py-2 rounded-lg transition-all text-gray-600 hover:text-sage-700">🌱 Kartu & Panduan</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Konten Utama -->
+    <main class="max-w-4xl mx-auto px-4 py-6 flex-grow w-full">
+
+        <!-- TAB 1: FORMULIR KOTAK CURHAT -->
+        <section id="tab-form" class="tab-content active">
+            <div class="bg-white rounded-2xl shadow-xs border border-sage-100 p-6 sm:p-8">
+                <div class="mb-6 border-b border-gray-100 pb-4">
+                    <h2 class="text-xl font-bold text-gray-800">Tuliskan Cerita atau Uneg-unegmu 🍃</h2>
+                    <p class="text-sm text-gray-500 mt-1">Tenang, kamu bisa menulis secara anonim. Ruang ini aman dan bebas dari penghakiman.</p>
+                </div>
+
+                <form id="curhatForm" onsubmit="submitCurhat(event)" class="space-y-6">
+                    <!-- Inisial -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Nama Panggilan / Inisial (Opsional)</label>
+                        <input type="text" id="author" placeholder="Contoh: Pejuang Ujian, Bintang, atau Anonim" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-sage-500 focus:ring-2 focus:ring-sage-100 outline-none text-sm transition-all">
+                    </div>
+
+                    <!-- Suasana Hati -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Bagaimana perasaanmu hari ini?</label>
+                        <div class="grid grid-cols-2 sm:grid-cols-5 gap-2">
+                            <label class="flex flex-col items-center justify-center p-3 rounded-xl border border-gray-200 cursor-pointer hover:bg-sage-50 transition-all">
+                                <input type="radio" name="mood" value="😊 Senang" class="hidden peer" required>
+                                <span class="text-2xl mb-1">😊</span>
+                                <span class="text-xs font-medium text-gray-600 peer-checked:text-sage-700">Senang</span>
+                            </label>
+                            <label class="flex flex-col items-center justify-center p-3 rounded-xl border border-gray-200 cursor-pointer hover:bg-sage-50 transition-all">
+                                <input type="radio" name="mood" value="😌 Tenang" class="hidden peer">
+                                <span class="text-2xl mb-1">😌</span>
+                                <span class="text-xs font-medium text-gray-600 peer-checked:text-sage-700">Tenang</span>
+                            </label>
+                            <label class="flex flex-col items-center justify-center p-3 rounded-xl border border-gray-200 cursor-pointer hover:bg-sage-50 transition-all">
+                                <input type="radio" name="mood" value="😐 Biasa" class="hidden peer">
+                                <span class="text-2xl mb-1">😐</span>
+                                <span class="text-xs font-medium text-gray-600 peer-checked:text-sage-700">Biasa</span>
+                            </label>
+                            <label class="flex flex-col items-center justify-center p-3 rounded-xl border border-gray-200 cursor-pointer hover:bg-sage-50 transition-all">
+                                <input type="radio" name="mood" value="🥱 Lelah" class="hidden peer">
+                                <span class="text-2xl mb-1">🥱</span>
+                                <span class="text-xs font-medium text-gray-600 peer-checked:text-sage-700">Lelah</span>
+                            </label>
+                            <label class="flex flex-col items-center justify-center p-3 rounded-xl border border-gray-200 cursor-pointer hover:bg-sage-50 transition-all">
+                                <input type="radio" name="mood" value="🌧️ Sedih/Cemas" class="hidden peer">
+                                <span class="text-2xl mb-1">🌧️</span>
+                                <span class="text-xs font-medium text-gray-600 peer-checked:text-sage-700">Sedih / Cemas</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Topik -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Topik yang ingin dibagikan:</label>
+                        <div class="flex flex-wrap gap-2">
+                            <label class="px-3 py-1.5 rounded-lg border border-gray-200 text-xs font-medium cursor-pointer hover:bg-sage-50">
+                                <input type="checkbox" name="topics" value="📚 Sekolah / Ujian" class="mr-1.5"> Sekolah / Tugas
+                            </label>
+                            <label class="px-3 py-1.5 rounded-lg border border-gray-200 text-xs font-medium cursor-pointer hover:bg-sage-50">
+                                <input type="checkbox" name="topics" value="👥 Pertemanan" class="mr-1.5"> Pertemanan
+                            </label>
+                            <label class="px-3 py-1.5 rounded-lg border border-gray-200 text-xs font-medium cursor-pointer hover:bg-sage-50">
+                                <input type="checkbox" name="topics" value="🏠 Keluarga" class="mr-1.5"> Keluarga
+                            </label>
+                            <label class="px-3 py-1.5 rounded-lg border border-gray-200 text-xs font-medium cursor-pointer hover:bg-sage-50">
+                                <input type="checkbox" name="topics" value="✨ Cerita Bahagia" class="mr-1.5"> Cerita Bahagia
+                            </label>
+                            <label class="px-3 py-1.5 rounded-lg border border-gray-200 text-xs font-medium cursor-pointer hover:bg-sage-50">
+                                <input type="checkbox" name="topics" value="💭 Lainnya" class="mr-1.5"> Lainnya
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Isi Cerita -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Ceritakan apa yang kamu rasakan:</label>
+                        <textarea id="story" rows="4" placeholder="Tuliskan dengan bahasamu sendiri, lepaskan semua beban di sini..." required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-sage-500 focus:ring-2 focus:ring-sage-100 outline-none text-sm transition-all resize-none"></textarea>
+                    </div>
+
+                    <!-- Harapan Dukungan -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Harapan dukungan saat ini:</label>
+                        <select id="support" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-sage-500 focus:ring-2 focus:ring-sage-100 outline-none text-sm bg-white">
+                            <option value="Hanya ingin didengar / lega">Hanya ingin didengar / lega (tidak perlu dibalas)</option>
+                            <option value="Ingin pesan penyemangat anonim di papan">Ingin pesan penyemangat anonim</option>
+                            <option value="Ingin dihubungkan dengan Sahabat Pendengar / Guru BK">Ingin terhubung dengan Sahabat Pendengar / Guru BK</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="w-full bg-sage-600 hover:bg-sage-700 text-white font-semibold py-3 rounded-xl transition-all shadow-md text-sm cursor-pointer">
+                        Kirim Curhatan dengan Aman 🕊️
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- TAB 2: PAPAN CERITA & APRESIASI -->
+        <section id="tab-board" class="tab-content">
+            <div class="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                <div>
+                    <h2 class="text-xl font-bold text-gray-800">Papan Apresiasi & Ruang Bersama 💬</h2>
+                    <p class="text-sm text-gray-500">Kumpulan cerita positif dan pesan penyemangat dari sesama teman.</p>
+                </div>
+                <button onclick="loadBoard()" class="text-xs bg-sage-100 text-sage-700 px-3 py-1.5 rounded-lg font-medium hover:bg-sage-200 transition-all">Muat Ulang</button>
+            </div>
+
+            <div id="storyList" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Konten dinamis dari JavaScript -->
+            </div>
+        </section>
+
+        <!-- TAB 3: KARTU REFLEKSI & PANDUAN -->
+        <section id="tab-guide" class="tab-content">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Kartu Refleksi Acak Interaktif -->
+                <div class="bg-white rounded-2xl border border-sage-100 p-6 shadow-xs flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-lg font-bold text-gray-800 mb-1">🎲 Kartu Refleksi Cepat</h3>
+                        <p class="text-xs text-gray-500 mb-6">Ambil satu kartu untuk mengenali emosimu hari ini.</p>
+                        
+                        <div class="perspective-1000 h-48 w-full cursor-pointer" onclick="flipCard()">
+                            <div id="cardInner" class="relative w-full h-full text-center transition-transform duration-500 transform-style-3d shadow-sm rounded-xl">
+                                <!-- Bagian Depan Kartu -->
+                                <div class="absolute inset-0 bg-sage-50 border border-sage-200 rounded-xl flex flex-col items-center justify-center p-6 backface-hidden">
+                                    <span class="text-3xl mb-2">🌱</span>
+                                    <h4 class="font-bold text-sage-800 text-sm">Ketuk untuk Mengambil Kartu</h4>
+                                    <p class="text-xs text-sage-600 mt-1">Temukan pertanyaan reflektifmu</p>
+                                </div>
+                                <!-- Bagian Belakang Kartu -->
+                                <div class="absolute inset-0 bg-sage-600 text-white rounded-xl flex flex-col items-center justify-center p-6 backface-hidden rotate-y-180">
+                                    <p id="cardQuestion" class="text-sm font-medium leading-relaxed">"Hal sulit apa yang berhasil kamu lewati minggu lalu, sekecil apa pun itu?"</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="flipCard()" class="mt-4 w-full bg-sage-50 text-sage-700 hover:bg-sage-100 py-2.5 rounded-xl font-semibold text-xs transition-all">
+                        Ambil Kartu Lain 🔀
+                    </button>
+                </div>
+
+                <!-- Panduan Mendengar Aktif -->
+                <div class="bg-white rounded-2xl border border-sage-100 p-6 shadow-xs">
+                    <h3 class="text-lg font-bold text-gray-800 mb-1">💡 Tips Sahabat Pendengar</h3>
+                    <p class="text-xs text-gray-500 mb-4">Cara mendengarkan teman tanpa menggurui:</p>
+                    
+                    <div class="space-y-3 text-sm">
+                        <div class="p-3 bg-sage-50 rounded-xl border border-sage-100">
+                            <span class="font-bold text-sage-700 block mb-1">1. Validasi Perasaannya</span>
+                            <p class="text-xs text-gray-600">Katakan: *"Wajar banget kalau kamu ngerasa capek di posisi itu."* Hindari langsung menyalahkan.</p>
+                        </div>
+                        <div class="p-3 bg-sage-50 rounded-xl border border-sage-100">
+                            <span class="font-bold text-sage-700 block mb-1">2. Tanyakan Kebutuhannya</span>
+                            <p class="text-xs text-gray-600">Tanya apakah mereka hanya ingin didengar atau butuh saran.</p>
+                        </div>
+                        <div class="p-3 bg-sage-50 rounded-xl border border-sage-100">
+                            <span class="font-bold text-sage-700 block mb-1">3. Jaga Kerahasiaan</span>
+                            <p class="text-xs text-gray-600">Cerita teman adalah amanah. Jangan disebarkan ke orang lain.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-sage-100 py-4 mt-8 text-center text-xs text-gray-400">
+        <p>Kotak Curhat & Sahabat Pendengar • Dibuat dengan penuh kepedulian 🌿</p>
+    </footer>
+
+    <!-- JavaScript Interaktif -->
+    <script>
+        // Navigasi Tab
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.getElementById('tab-' + tabId).classList.add('active');
+
+            ['form', 'board', 'guide'].forEach(id => {
+                const btn = document.getElementById('btn-' + id);
+                if (id === tabId) {
+                    btn.className = "px-4 py-2 rounded-lg transition-all text-sage-700 bg-white shadow-xs font-semibold";
+                } else {
+                    btn.className = "px-4 py-2 rounded-lg transition-all text-gray-600 hover:text-sage-700";
+                }
+            });
+
+            if (tabId === 'board') loadBoard();
+        }
+
+        // Data Awal Mockup jika localStorage kosong
+        const defaultStories = [
+            {
+                id: 1,
+                author: "Pejuang Ujian",
+                mood: "🥱 Lelah",
+                topics: ["📚 Sekolah / Ujian"],
+                story: "Lagi pusing banget sama materi matematika tambahan, tapi bersyukur punya teman kelompok yang mau bantuin belajar bareng sampai paham.",
+                support: "Ingin pesan penyemangat anonim di papan",
+                date: "Hari ini",
+                likes: 4
+            },
+            {
+                id: 2,
+                author: "Bintang",
+                mood: "😊 Senang",
+                topics: ["✨ Cerita Bahagia"],
+                story: "Hari ini berhasil nyelesaiin lukisan yang udah aku tunda selama seminggu. Senang banget rasanya bisa konsisten hobi lagi!",
+                support: "Hanya ingin didengar / lega",
+                date: "Kemarin",
+                likes: 7
+            }
+        ];
+
+        // Submit Curhat
+        function submitCurhat(e) {
+            e.preventDefault();
+            const author = document.getElementById('author').value.trim() || "Anonim";
+            const mood = document.querySelector('input[name="mood"]:checked').value;
+            const topics = Array.from(document.querySelectorAll('input[name="topics"]:checked')).map(el => el.value);
+            const story = document.getElementById('story').value.trim();
+            const support = document.getElementById('support').value;
+
+            const newEntry = {
+                id: Date.now(),
+                author,
+                mood,
+                topics,
+                story,
+                support,
+                date: "Baru saja",
+                likes: 0
+            };
+
+            let stories = JSON.parse(localStorage.getItem('curhat_stories')) || defaultStories;
+            stories.unshift(newEntry);
+            localStorage.setItem('curhat_stories', JSON.stringify(stories));
+
+            document.getElementById('curhatForm').reset();
+            alert("Curhatanmu berhasil dikirim dengan aman! 🕊️ Terima kasih sudah berbagi.");
+            switchTab('board');
+        }
+
+        // Load Papan Cerita
+        function loadBoard() {
+            let stories = JSON.parse(localStorage.getItem('curhat_stories'));
+            if (!stories) {
+                stories = defaultStories;
+                localStorage.setItem('curhat_stories', JSON.stringify(stories));
+            }
+
+            const container = document.getElementById('storyList');
+            container.innerHTML = "";
+
+            if (stories.length === 0) {
+                container.innerHTML = `<p class="text-gray-400 text-sm col-span-2 text-center py-8">Belum ada cerita di papan. Jadilah yang pertama berbagi!</p>`;
+                return;
+            }
+
+            stories.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-2xl border border-sage-100 p-5 shadow-xs flex flex-col justify-between";
+                card.innerHTML = `
+                    <div>
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="text-xs font-bold text-sage-700 bg-sage-50 px-2.5 py-1 rounded-full">${item.author}</span>
+                            <span class="text-xs text-gray-400">${item.date}</span>
+                        </div>
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-sm">${item.mood}</span>
